@@ -7,6 +7,15 @@ struct Node
 	struct Node *right;
 	int height;
 };
+struct Node* New_Node(int val)
+{
+	struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+	new_node->info = val;
+	new_node->left = NULL;
+	new_node->right = NULL;
+	new_node->height = 1;
+	return(new_node);
+}
 int height(struct Node *node)
 {
 	if (node == NULL)
@@ -16,15 +25,6 @@ int height(struct Node *node)
 int max(int a, int b) 
 { 
 	return (a > b)? a : b; 
-}
-struct Node* New_Node(int val)
-{
-	struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
-	new_node->info = val;
-	new_node->left = NULL;
-	new_node->right = NULL;
-	new_node->height = 1;
-	return(new_node);
 }
 struct Node *RRotate(struct Node *node)
 {
@@ -46,7 +46,7 @@ struct Node *LRotate(struct Node *node)
 	R->height = max(height(R->left), height(R->right))+1;
 	return R;
 }
-int getBalance(struct Node *N) 
+int Balance(struct Node *N) 
 { 
 	if (N == NULL) 
 		return 0; 
@@ -63,7 +63,7 @@ struct Node* Insert(struct Node* node, int info)
 	else
 		return node;
 	node->height = 1 + max(height(node->left), height(node->right));
-	int balance = getBalance(node);
+	int balance = Balance(node);
 	if (balance > 1 && info < node->left->info)
 		return RRotate(node);
 	if (balance < -1 && info > node->right->info)
@@ -114,17 +114,17 @@ struct Node* Delete(struct Node* root, int info)
 	if(root == NULL) 
 		return root;
 	root->height = 1 + max(height(root->left), height(root->right)); 
-	int balance = getBalance(root);
-	if(balance > 1 && getBalance(root->left) >= 0)
+	int balance = Balance(root);
+	if(balance > 1 && Balance(root->left) >= 0)
 		return RRotate(root);
-	if(balance > 1 && getBalance(root->left) < 0)
+	if(balance > 1 && Balance(root->left) < 0)
 	{
 		root->left = LRotate(root->left);
 		return RRotate(root);
 	}
-	if (balance < -1 && getBalance(root->right) <= 0)
+	if (balance < -1 && Balance(root->right) <= 0)
 		return LRotate(root);
-	if (balance < -1 && getBalance(root->right) > 0)
+	if (balance < -1 && Balance(root->right) > 0)
 	{
 		root->right = RRotate(root->right);
 		return LRotate(root);
@@ -168,7 +168,7 @@ void main()
 	printf("6. Exit \n");
 	printf("============================== \n");
 	loop:
-	printf("Enter your choice = ");
+	printf("\nEnter your choice = ");
 	scanf("%d",&ch);
 	switch(ch)
 	{
